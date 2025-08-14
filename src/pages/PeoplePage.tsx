@@ -1,13 +1,17 @@
 import { useEffect, useState } from 'react';
 import { Loader } from '../components/Loader/Loader';
 import PeopleShowTable from '../MyComponents/PeopleShowTable';
+import { Person } from '../types';
+import { useParams } from 'react-router-dom';
 
 export const PeoplePage = () => {
-  const [people, setPeople] = useState([]); // массив по умолчанию
-  const [loading, setLoading] = useState(true); // состояние загрузки
+  const [people, setPeople] = useState<Person[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const { slug } = useParams();
 
   useEffect(() => {
-    fetch('/api/people')
+    fetch('https://mate-academy.github.io/react_people-table/api/people.json')
       .then(res => res.json())
       .then(data => setPeople(data))
       .finally(() => setLoading(false));
@@ -21,5 +25,7 @@ export const PeoplePage = () => {
     return <p>There are no people on the server</p>;
   }
 
-  return <PeopleShowTable people={people} selectedPerson={null} />;
+  const selectedPerson = people.find(p => p.slug === slug) || null;
+
+  return <PeopleShowTable people={people} selectedPerson={selectedPerson} />;
 };
