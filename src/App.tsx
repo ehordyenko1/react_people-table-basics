@@ -3,7 +3,7 @@ import HomePage from './pages/HomePage';
 import { PeoplePage } from './pages/PeoplePage';
 import PageNotFound from './pages/PageNotFound';
 import './App.scss';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 
 export const App = () => {
   return (

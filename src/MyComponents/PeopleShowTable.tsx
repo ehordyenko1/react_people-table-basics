@@ -1,8 +1,9 @@
 import { Person } from '../types';
+import PersonLink from './PersonLink';
 
 interface Props {
-  selectedPerson: Person | null;
   people: Person[];
+  selectedPerson: Person | null;
 }
 
 const PeopleShowTable = ({ selectedPerson, people }: Props) => {
@@ -19,19 +20,32 @@ const PeopleShowTable = ({ selectedPerson, people }: Props) => {
         </tr>
       </thead>
       <tbody>
-        {people.map(p => (
-          <tr
-            key={p.slug}
-            className={p === selectedPerson ? 'has-background-warning' : ''}
-          >
-            <td>{p.name}</td>
-            <td>{p.sex}</td>
-            <td>{p.born}</td>
-            <td>{p.died}</td>
-            <td>{p.motherName}</td>
-            <td>{p.fatherName}</td>
-          </tr>
-        ))}
+        {people.map(p => {
+          const mother =
+            people.find(person => person.name === p.motherName) || null;
+          const father =
+            people.find(person => person.name === p.fatherName) || null;
+
+          return (
+            <tr
+              key={p.slug}
+              className={p === selectedPerson ? 'has-background-warning' : ''}
+            >
+              <td>
+                <PersonLink person={p} />
+              </td>
+              <td>{p.sex}</td>
+              <td>{p.born}</td>
+              <td>{p.died}</td>
+              <td>
+                {mother ? <PersonLink person={mother} /> : p.motherName || '-'}
+              </td>
+              <td>
+                {father ? <PersonLink person={father} /> : p.fatherName || '-'}
+              </td>
+            </tr>
+          );
+        })}
       </tbody>
     </table>
   );
